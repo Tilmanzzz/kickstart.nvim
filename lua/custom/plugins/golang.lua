@@ -1,59 +1,59 @@
 return {
-  {
-    'williamboman/mason.nvim',
-    opts = {},
-  },
-
-  {
-    'williamboman/mason-lspconfig.nvim',
-    opts = {
-      ensure_installed = { 'gopls' },
-      handlers = {
-        function(server) end, -- we configure manually
-      },
-    },
-  },
-
-  {
-    'neovim/nvim-lspconfig',
-    config = function()
-      local root_patterns = { 'go.mod', 'go.work', '.git' }
-
-      -- Path to mason-installed gopls
-      local mason_registry = require 'mason-registry'
-      local gopls_pkg = mason_registry.get_package 'gopls'
-      local gopls_path = gopls_pkg:get_install_path() .. '/bin/gopls'
-
-      -- Modern Neovim 0.11+ config
-      local gopls_config = vim.lsp.config {
-        cmd = { gopls_path },
-        filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
-
-        root_dir = function(fname)
-          return vim.fs.root(fname, root_patterns)
-        end,
-
-        settings = {
-          gopls = {
-            gofumpt = true, -- you can turn this off if unwanted
-            staticcheck = true,
-            analyses = {
-              unusedparams = true,
-              shadow = true,
-              nilness = true,
-              unusedwrite = true,
-            },
-          },
-        },
-      }
-
-      -- Start LSP when entering Go buffers
-      vim.api.nvim_create_autocmd('FileType', {
-        pattern = { 'go', 'gomod', 'gowork', 'gotmpl' },
-        callback = function(args)
-          vim.lsp.start(gopls_config, { bufnr = args.buf })
-        end,
-      })
-    end,
-  },
+  -- {
+  --   'williamboman/mason.nvim',
+  --   opts = {},
+  -- },
+  --
+  -- {
+  --   'williamboman/mason-lspconfig.nvim',
+  --   opts = {
+  --     ensure_installed = { 'gopls' },
+  --     handlers = {
+  --       function(server) end, -- we configure manually
+  --     },
+  --   },
+  -- },
+  --
+  -- {
+  --   'neovim/nvim-lspconfig',
+  --   config = function()
+  --     local root_patterns = { 'go.mod', 'go.work', '.git' }
+  --
+  --     -- Path to mason-installed gopls
+  --     local mason_registry = require 'mason-registry'
+  --     local gopls_pkg = mason_registry.get_package 'gopls'
+  --     local gopls_path = gopls_pkg:get_install_path() .. '/bin/gopls'
+  --
+  --     -- Modern Neovim 0.11+ config
+  --     local gopls_config = vim.lsp.config {
+  --       cmd = { gopls_path },
+  --       filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+  --
+  --       root_dir = function(fname)
+  --         return vim.fs.root(fname, root_patterns)
+  --       end,
+  --
+  --       settings = {
+  --         gopls = {
+  --           gofumpt = true, -- you can turn this off if unwanted
+  --           staticcheck = true,
+  --           analyses = {
+  --             unusedparams = true,
+  --             shadow = true,
+  --             nilness = true,
+  --             unusedwrite = true,
+  --           },
+  --         },
+  --       },
+  --     }
+  --
+  --     -- Start LSP when entering Go buffers
+  --     vim.api.nvim_create_autocmd('FileType', {
+  --       pattern = { 'go', 'gomod', 'gowork', 'gotmpl' },
+  --       callback = function(args)
+  --         vim.lsp.start(gopls_config, { bufnr = args.buf })
+  --       end,
+  --     })
+  --   end,
+  -- },
 }
